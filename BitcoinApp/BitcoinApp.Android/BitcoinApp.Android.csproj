@@ -51,6 +51,9 @@
     <PackageReference Include="Microcharts.Forms">
       <Version>0.6.1</Version>
     </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>11.0.2</Version>
+    </PackageReference>
     <PackageReference Include="SkiaSharp">
       <Version>1.60.2</Version>
     </PackageReference>
