@@ -5,15 +5,16 @@
              xmlns:local="clr-namespace:BitcoinApp"
              xmlns:helpers="clr-namespace:BitcoinApp.Helpers"
              x:Class="BitcoinApp.MainPage"
-             Title="BitconApp"
+             Title="BitcoinApp"
              BackgroundColor="WhiteSmoke"
              >
     <StackLayout>
+        <ActivityIndicator IsRunning="{Binding IsRefreshing}"/>
         <Frame IsClippedToBounds="True"
         HasShadow="True"
         BackgroundColor="White"
-        Padding="5"
-        Margin="10"
+        Padding="5,5,5,20"
+        Margin="10, -30, 10, 0"
         OutlineColor="Gray">
             <StackLayout Orientation="Vertical">
                 <Grid
@@ -21,21 +22,24 @@
              BackgroundColor="Transparent">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="56"/>
-                        <RowDefinition Height="90"/>
-                        <RowDefinition Height="100"/>
-                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="60"/>
+                        <RowDefinition Height="150"/>
+                        <RowDefinition Height="50"/>
                     </Grid.RowDefinitions>
 
                     <Label Grid.Row="0"
                        FontSize="20"
+                       TextColor="#000"
+                       FontFamily="Roboto"
                        VerticalOptions="StartAndExpand"
                        HorizontalOptions="CenterAndExpand"
                        Text="Bitcoin (BTC)"/>
                     <Label Grid.Row="1"
                        FontSize="45"
+                       FontFamily="Xants"
                        VerticalOptions="CenterAndExpand"
                        HorizontalOptions="CenterAndExpand"
-                       Text="U$ 6235,70"
+                       Text="{Binding ActualPrice, StringFormat='U$ {0}'}"
                        TextColor="#003E06"
                        FontAttributes="Bold"/>
                     <microcharts:ChartView Grid.Row="2" x:Name="chartView"/>
@@ -43,7 +47,8 @@
                         FontSize="14"
                         TextColor="#FFFFFF"
                         BackgroundColor="#003E06"
-                        VerticalOptions="EndAndExpand"
+                        VerticalOptions="Center"
+                            HorizontalOptions="Center"
                     Text="Mais Informações"/>
 
                 </Grid>

@@ -8,8 +8,8 @@ namespace BitcoinApp.Model
     public class Value
     {
         [JsonProperty("x")]
-        public int TimeStamp { get; set; }
+        public long TimeStamp { get; set; }
         [JsonProperty("y")]
-        public double UsdPrice { get; set; }
+        public decimal UsdPrice { get; set; }
     }
 }
