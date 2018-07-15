@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:BitcoinApp"
+             xmlns:helpers="clr-namespace:BitcoinApp.Helpers"
+             x:Class="BitcoinApp.MainPage"
+             Title="BitconApp"
+             BackgroundColor="#707070"
+             >
+
+    <StackLayout>
+        <ListView SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                  SeparatorVisibility="None"
+            RowHeight="400"
+                  ItemsSource="{Binding CardDataCollection}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <helpers:CardViewTemplate/>
+                    </ViewCell>
+                    
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            
+        </ListView>
+    </StackLayout>
+
+</ContentPage>
