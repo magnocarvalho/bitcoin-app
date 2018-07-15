@@ -1,28 +1,54 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:microcharts="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms"
              xmlns:local="clr-namespace:BitcoinApp"
              xmlns:helpers="clr-namespace:BitcoinApp.Helpers"
              x:Class="BitcoinApp.MainPage"
              Title="BitconApp"
-             BackgroundColor="#707070"
+             BackgroundColor="WhiteSmoke"
              >
-
     <StackLayout>
-        <ListView SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
-                  SeparatorVisibility="None"
-            RowHeight="400"
-                  ItemsSource="{Binding CardDataCollection}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <helpers:CardViewTemplate/>
-                    </ViewCell>
-                    
-                </DataTemplate>
-            </ListView.ItemTemplate>
-            
-        </ListView>
+        <Frame IsClippedToBounds="True"
+        HasShadow="True"
+        BackgroundColor="White"
+        Padding="5"
+        Margin="10"
+        OutlineColor="Gray">
+            <StackLayout Orientation="Vertical">
+                <Grid
+             Padding="0"
+             BackgroundColor="Transparent">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="56"/>
+                        <RowDefinition Height="90"/>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="100"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0"
+                       FontSize="20"
+                       VerticalOptions="StartAndExpand"
+                       HorizontalOptions="CenterAndExpand"
+                       Text="Bitcoin (BTC)"/>
+                    <Label Grid.Row="1"
+                       FontSize="45"
+                       VerticalOptions="CenterAndExpand"
+                       HorizontalOptions="CenterAndExpand"
+                       Text="U$ 6235,70"
+                       TextColor="#003E06"
+                       FontAttributes="Bold"/>
+                    <microcharts:ChartView Grid.Row="2" x:Name="chartView"/>
+                    <Button Grid.Row="3"
+                        FontSize="14"
+                        TextColor="#FFFFFF"
+                        BackgroundColor="#003E06"
+                        VerticalOptions="EndAndExpand"
+                    Text="Mais Informações"/>
+
+                </Grid>
+            </StackLayout>
+        </Frame>
     </StackLayout>
 
 </ContentPage>
