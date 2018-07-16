@@ -28,7 +28,7 @@ namespace BitcoinApp
                 LineMode = LineMode.Straight
             };
             chartView.Chart.LabelTextSize = 25;
-
         }
+
 	}
 }
