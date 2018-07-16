@@ -1,4 +1,5 @@
-﻿using BitcoinApp.ViewModel;
+﻿using BitcoinApp.Helpers;
+using BitcoinApp.ViewModel;
 using Microcharts;
 using SkiaSharp;
 using System;
@@ -20,7 +21,13 @@ namespace BitcoinApp
 			InitializeComponent();
             ViewModel = new MainVieWModel();
             BindingContext = ViewModel;
+        }
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            ViewModel.LoadChartData();
+            ViewModel.LoadActualPriceData();
             chartView.Chart = new LineChart
             {
                 Entries = ViewModel.Entries,
@@ -29,6 +36,5 @@ namespace BitcoinApp
             };
             chartView.Chart.LabelTextSize = 25;
         }
-
-	}
+    }
 }

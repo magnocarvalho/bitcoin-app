@@ -10,7 +10,8 @@
              >
     <ScrollView>
         <StackLayout>
-            <ActivityIndicator IsRunning="{Binding IsRefreshing}"/>
+            <ActivityIndicator IsRunning="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}"/>
             <Frame IsClippedToBounds="True"
         HasShadow="True"
         BackgroundColor="White"
@@ -40,7 +41,7 @@
                        FontFamily="Xants"
                        VerticalOptions="CenterAndExpand"
                        HorizontalOptions="CenterAndExpand"
-                       Text="{Binding ActualPrice, StringFormat='U$ {0}'}"
+                       Text="{Binding ActualPrice}"
                        TextColor="#003E06"
                        FontAttributes="Bold"/>
                         <microcharts:ChartView Grid.Row="2" x:Name="chartView"/>

@@ -1,4 +1,5 @@
-﻿using BitcoinApp.Model;
+﻿using BitcoinApp.Helpers;
+using BitcoinApp.Model;
 using Newtonsoft.Json;
 using SkiaSharp;
 using System;
@@ -14,11 +15,11 @@ namespace BitcoinApp.ViewModel
 {
     public class MainVieWModel : BaseViewModel
     {
-        private bool _isRefresing;
-        public bool IsRefreshing
+        private bool _isBusy;
+        public bool IsBusy
         {
-            get { return _isRefresing; }
-            set { SetProperty(ref _isRefresing, value); }
+            get { return _isBusy; }
+            set { SetProperty(ref _isBusy, value); }
         }
 
         private string _actualPrice;
@@ -28,36 +29,34 @@ namespace BitcoinApp.ViewModel
             set { SetProperty(ref _actualPrice, value); }
         }
 
-
         public ObservableCollection<Microcharts.Entry> Entries { get; set; }
+
         public MainVieWModel()
         {
-            //Entries = new ObservableCollection<Microcharts.Entry>();
-            IsRefreshing = false;
-            GetData();
+            IsBusy = false;
         }
 
-        public async void GetData()
+        internal void LoadChartData()
         {
-            IsRefreshing = true;
-            var url = "https://api.blockchain.info/charts/market-price?timespan=6months";
-            var client = new HttpClient();
-            var result = client.GetStringAsync(url);
-            var rs = JsonConvert.DeserializeObject<MarketPrice>(result.Result);
-            //rs.Values.Reverse();
-            List<Microcharts.Entry> entries = new List<Microcharts.Entry>();
-            ActualPrice = rs.Values.LastOrDefault().UsdPrice.ToString();
+            IsBusy = true;
+            MarketPrice rs = ApiSync.GetChartValues();
+            var entries = new List<Microcharts.Entry>();
             foreach (var price in rs.Values)
             {
                 entries.Add(new Microcharts.Entry((float)price.UsdPrice)
                 {
                     Color = SKColor.Parse("#003E06"),
-                    //Label = GetLabel(price)
                     ValueLabel = GetLabel(price)
                 });
             }
             Entries = new ObservableCollection<Microcharts.Entry>(entries);
-            IsRefreshing = false;
+            IsBusy = false;
+        }
+
+        internal void LoadActualPriceData()
+        {
+            var value = ApiSync.GetActualPrice();
+            ActualPrice = String.Format("U$ {0:0.##}", value.UsdPrice);
         }
 
         private static string GetLabel(Value price)
