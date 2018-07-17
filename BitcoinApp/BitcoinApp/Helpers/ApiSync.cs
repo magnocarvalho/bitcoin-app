@@ -1,5 +1,6 @@
 ﻿using BitcoinApp.Model;
 using Newtonsoft.Json;
+using Plugin.Connectivity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,17 +21,21 @@ namespace BitcoinApp.Helpers
             return charValues;
         }
 
-        public static Value GetActualPrice()
+        public static ActualPrice GetActualPrice()
         {
             var url = "https://api.blockchain.info/stats";
             var client = new HttpClient();
             var apiResult = client.GetStringAsync(url);
-            var jsonData = JsonConvert.DeserializeObject<Dictionary<string, object>>(apiResult.Result);
-            var value = new Value();
-            value.TimeStamp = long.Parse(GetValue(jsonData, "timestamp").ToString());
-            value.UsdPrice = decimal.Parse(GetValue(jsonData, "market_price_usd").ToString());
-            return value;
+            var actualPrice = JsonConvert.DeserializeObject<ActualPrice>(apiResult.Result);
+            actualPrice.FormatedDate = DateTime.Now;
+            //var jsonData = JsonConvert.DeserializeObject<Dictionary<string, object>>(apiResult.Result);
+            //var value = new Value();
+            //value.TimeStamp = long.Parse(GetValue(jsonData, "timestamp").ToString());
+            //value.UsdPrice = decimal.Parse(GetValue(jsonData, "market_price_usd").ToString());
+            return actualPrice; 
         }
+
+        public static bool HasConnection() =>  CrossConnectivity.Current.IsConnected;
 
         protected static object GetValue(Dictionary<string, object> lst, string key)
         {

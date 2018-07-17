@@ -19,8 +19,9 @@ namespace BitcoinApp.Db
                 SQLiteOpenFlags.ReadWrite |
                 SQLiteOpenFlags.Create |
                 SQLiteOpenFlags.SharedCache);
-
-            //Connection.CreateTable<MarketPrice>();
+            Connection.CreateTable<MarketPrice>();
+            Connection.CreateTable<ActualPrice>();
+            Connection.CreateTable<Value>();
         }
 
         public void Dispose()
@@ -30,10 +31,6 @@ namespace BitcoinApp.Db
         }
 
         public SQLiteConnection GetConnection() => Connection;
-
-        public void Insert<T>(T item) => Connection.Insert(item);
-
-        public void Update<T>(T item) => Connection.Update(item);
         
     }
 }

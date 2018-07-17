@@ -1,5 +1,6 @@
 ﻿using BitcoinApp.Helpers;
 using BitcoinApp.ViewModel;
+using CommonServiceLocator;
 using Microcharts;
 using SkiaSharp;
 using System;
@@ -19,15 +20,15 @@ namespace BitcoinApp
         public MainPage()
 		{
 			InitializeComponent();
-            ViewModel = new MainVieWModel();
+            ViewModel = ServiceLocator.Current.GetInstance<MainVieWModel>();
             BindingContext = ViewModel;
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            ViewModel.LoadChartData();
-            ViewModel.LoadActualPriceData();
+            ViewModel.LoadData();
+            //ViewModel.LoadActualPriceData();
             chartView.Chart = new LineChart
             {
                 Entries = ViewModel.Entries,

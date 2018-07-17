@@ -1,5 +1,7 @@
-﻿using BitcoinApp.Helpers;
+﻿using BitcoinApp.Db;
+using BitcoinApp.Helpers;
 using BitcoinApp.Model;
+using BitcoinApp.Services.Interfaces;
 using Newtonsoft.Json;
 using SkiaSharp;
 using System;
@@ -29,57 +31,61 @@ namespace BitcoinApp.ViewModel
             set { SetProperty(ref _actualPrice, value); }
         }
 
+        private string _actualDate;
+        public string ActualDate
+        {
+            get { return _actualDate; }
+            set { SetProperty(ref _actualDate, value); }
+        }
+
         public ObservableCollection<Microcharts.Entry> Entries { get; set; }
 
-        public MainVieWModel()
+        private readonly IActualPriceService _actualPriceService;
+
+        public MainVieWModel(IActualPriceService actualPriceService)
         {
+            _actualPriceService = actualPriceService;
             IsBusy = false;
         }
 
-        internal void LoadChartData()
+        internal void LoadData()
         {
             IsBusy = true;
-            MarketPrice rs = ApiSync.GetChartValues();
-            var entries = new List<Microcharts.Entry>();
-            foreach (var price in rs.Values)
+            ActualPrice actualPrice;
+            actualPrice = _actualPriceService.Get();
+            if (actualPrice != null)
             {
-                entries.Add(new Microcharts.Entry((float)price.UsdPrice)
+                if(actualPrice.FormatedDate.Date.Date == DateTime.Now.Date.Date)
                 {
-                    Color = SKColor.Parse("#003E06"),
-                    ValueLabel = GetLabel(price)
-                });
+                    LoadActualPriceData();
+                }
+
             }
-            Entries = new ObservableCollection<Microcharts.Entry>(entries);
+            if (Helpers.ApiSync.HasConnection())
+            {
+                MarketPrice rs = ApiSync.GetChartValues();
+                if (rs == null)
+                    return;
+
+                var entries = new List<Microcharts.Entry>();
+                foreach (var price in rs.Values)
+                {
+                    entries.Add(new Microcharts.Entry((float)price.UsdPrice)
+                    {
+                        Color = SKColor.Parse("#003E06"),
+                        ValueLabel = price.FormatedDate.Day == 1 ? String.Format("{0:MMM}", price.FormatedDate) : null
+                    });
+                }
+                Entries = new ObservableCollection<Microcharts.Entry>(entries); 
+            }
             IsBusy = false;
         }
 
         internal void LoadActualPriceData()
         {
-            var value = ApiSync.GetActualPrice();
-            ActualPrice = String.Format("U$ {0:0.##}", value.UsdPrice);
-        }
-
-        private static string GetLabel(Value price)
-        {
-            switch (price.TimeStamp)
-            {
-                case 1530403200:
-                    return "Jul";
-                case 1527811200:
-                    return "Jun";
-                case 1525132800:
-                    return "Mai";
-                case 1522540800:
-                    return "Abr";
-                case 1519862400:
-                    return "Mar";
-                case 1517443200:
-                    return "Fev";
-                case 1514764800:
-                    return "Jan";
-                default:
-                    return null;
-            }
+            var actual = ApiSync.GetActualPrice();
+            ActualPrice = String.Format("U$ {0:0.##}", actual.UsdPrice);
+            ActualDate = actual.FormatedDate.Date.ToString("dd/MM/yyyy");
         }
     }
 }

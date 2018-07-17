@@ -25,6 +25,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="50"/>
                             <RowDefinition Height="60"/>
+                            <RowDefinition Height="20"/>
                             <RowDefinition Height="100"/>
                             <RowDefinition Height="100"/>
                         </Grid.RowDefinitions>
@@ -44,8 +45,12 @@
                        Text="{Binding ActualPrice}"
                        TextColor="#003E06"
                        FontAttributes="Bold"/>
-                        <microcharts:ChartView Grid.Row="2" x:Name="chartView"/>
-                        <Button Grid.Row="3"
+                        <Label Grid.Row="2"
+                            HorizontalOptions="Center"
+                            Text="{Binding ActualDate}"
+                               TextColor="#000"/>
+                        <microcharts:ChartView Grid.Row="3" x:Name="chartView"/>
+                        <Button Grid.Row="4"
                         FontSize="14"
                         TextColor="#FFFFFF"
                         BackgroundColor="#003E06"
