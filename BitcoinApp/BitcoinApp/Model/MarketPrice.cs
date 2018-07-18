@@ -13,7 +13,6 @@ namespace BitcoinApp.Model
         public string Unit { get; set; }
         public string Period { get; set; }
         public string Description { get; set; }
-        [Ignore]
         public List<Value> Values { get; set; }
     }
 }

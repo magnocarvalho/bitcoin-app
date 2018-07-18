@@ -13,6 +13,7 @@ namespace BitcoinApp
         private bool _disposed;
 
         private IActualPriceRepository _actualPriceRepository;
+        private IMarketPriceRepository _marketPriceRepository;
 
         public UnitOfWork(Database dbContext)
         {
@@ -20,6 +21,7 @@ namespace BitcoinApp
         }
 
         public IActualPriceRepository ActualPriceRepository => _actualPriceRepository ?? (_actualPriceRepository = new ActualPriceRepository(_dbContext));
+        public IMarketPriceRepository MarketPriceRepository => _marketPriceRepository ?? (_marketPriceRepository = new MarketPriceRepository(_dbContext));
 
         public void Commit()
         {

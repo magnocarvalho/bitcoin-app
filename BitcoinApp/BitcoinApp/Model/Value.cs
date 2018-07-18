@@ -23,8 +23,8 @@ namespace BitcoinApp.Model
         private DateTime TimeStampConverter(double timeStamp)
         {
             var dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
-            dateTime = dateTime.AddSeconds(timeStamp).ToLocalTime();
-            return dateTime;
+            return dateTime.AddSeconds(timeStamp).ToLocalTime();
+            
         }
     }
 }

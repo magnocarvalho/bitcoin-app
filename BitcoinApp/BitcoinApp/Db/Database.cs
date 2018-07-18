@@ -8,7 +8,6 @@ namespace BitcoinApp.Db
     {
         public Database() : base()
         {
-
         }
     }
 }

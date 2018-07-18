@@ -24,6 +24,13 @@ namespace BitcoinApp.ViewModel
             set { SetProperty(ref _isBusy, value); }
         }
 
+        private bool _errorMessage;
+        public bool ErrorMessage
+        {
+            get { return _errorMessage; }
+            set { SetProperty(ref _errorMessage, value);}
+        }
+
         private string _actualPrice;
         public string ActualPrice
         {
@@ -38,54 +45,115 @@ namespace BitcoinApp.ViewModel
             set { SetProperty(ref _actualDate, value); }
         }
 
+        public Command LoadDataCommand { get; set; }
+
         public ObservableCollection<Microcharts.Entry> Entries { get; set; }
 
         private readonly IActualPriceService _actualPriceService;
+        private readonly IMarketPriceService _marketPriceService;
 
-        public MainVieWModel(IActualPriceService actualPriceService)
+        public MainVieWModel(IActualPriceService actualPriceService, IMarketPriceService marketPriceService)
         {
             _actualPriceService = actualPriceService;
+            _marketPriceService = marketPriceService;
             IsBusy = false;
+            ErrorMessage = false;
+            LoadDataCommand = new Command(LoadDataExecuteCommand);
         }
 
-        internal void LoadData()
+        internal void LoadDataExecuteCommand()
         {
+            if (IsBusy)
+                return;
+
             IsBusy = true;
-            ActualPrice actualPrice;
-            actualPrice = _actualPriceService.Get();
-            if (actualPrice != null)
+            ErrorMessage = true;
+            ActualPrice actualPrice = _actualPriceService.Get();
+            MarketPrice marketPrice = _marketPriceService.Get();
+            
+            if (IsValid(actualPrice) && IsValid(marketPrice))
             {
-                if(actualPrice.FormatedDate.Date.Date == DateTime.Now.Date.Date)
+                if (!LoadActualPriceData())
                 {
-                    LoadActualPriceData();
+                    FillActualPrice(actualPrice);
                 }
-
+                if (!LoadChatData())
+                {
+                    DrawChart(marketPrice); 
+                }
             }
-            if (Helpers.ApiSync.HasConnection())
+            else
             {
-                MarketPrice rs = ApiSync.GetChartValues();
-                if (rs == null)
-                    return;
-
-                var entries = new List<Microcharts.Entry>();
-                foreach (var price in rs.Values)
+                if (!LoadActualPriceData())
                 {
-                    entries.Add(new Microcharts.Entry((float)price.UsdPrice)
-                    {
-                        Color = SKColor.Parse("#003E06"),
-                        ValueLabel = price.FormatedDate.Day == 1 ? String.Format("{0:MMM}", price.FormatedDate) : null
-                    });
+                    ActualPrice = "--";
+                    ActualDate = null;
+                    ErrorMessage &= true;
                 }
-                Entries = new ObservableCollection<Microcharts.Entry>(entries); 
+                if (!LoadChatData())
+                {
+                    Entries = null;
+                    ErrorMessage &= true;
+                }
             }
             IsBusy = false;
         }
-
-        internal void LoadActualPriceData()
+        private void FillActualPrice(ActualPrice actual)
         {
-            var actual = ApiSync.GetActualPrice();
             ActualPrice = String.Format("U$ {0:0.##}", actual.UsdPrice);
             ActualDate = actual.FormatedDate.Date.ToString("dd/MM/yyyy");
+        }
+
+        internal bool LoadActualPriceData()
+        {
+            if (!ApiSync.HasConnection())
+                return false;
+
+            var actual = ApiSync.GetActualPrice();
+            var _actual = _actualPriceService.Get();
+            FillActualPrice(actual);
+            if (IsValid(_actual))
+                return _actualPriceService.Update(actual);
+            else
+                return _actualPriceService.Insert(actual);
+        }
+
+        internal bool LoadChatData()
+        {
+            if (!ApiSync.HasConnection())
+                return false;
+
+            var marketPrice = ApiSync.GetChartValues();
+            var _marketPrice = _marketPriceService.Get();
+            if (!IsValid(marketPrice))
+                return false;
+
+            if (IsValid(_marketPrice))
+                return _marketPriceService.Update(marketPrice);
+            else
+                return _marketPriceService.Insert(marketPrice);
+        }
+
+        private void DrawChart(MarketPrice marketPrice)
+        {
+            var entries = new List<Microcharts.Entry>();
+            foreach (var price in marketPrice.Values)
+            {
+                entries.Add(new Microcharts.Entry((float)price.UsdPrice)
+                {
+                    Color = SKColor.Parse("#003E06"),
+                    ValueLabel = price.FormatedDate.Day == 1 ? String.Format("{0:MMM}", price.FormatedDate) : null
+                });
+            }
+            Entries = new ObservableCollection<Microcharts.Entry>(entries);
+        }
+
+        internal bool IsValid<T>(T item)
+        {
+            if (item != null)
+                return true;
+            else
+                return false;
         }
     }
 }

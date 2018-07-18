@@ -8,5 +8,8 @@ namespace BitcoinApp.Services.Interfaces
     public interface IActualPriceService
     {
         ActualPrice Get();
+        bool Insert(ActualPrice actualPrice);
+        bool Update(ActualPrice actualPrice);
+        bool Exists(int id);
     }
 }
