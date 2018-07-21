@@ -53,7 +53,7 @@
                                     HorizontalOptions="Center"
                                     Text="{Binding ActualDate}"
                                        TextColor="#000"/>
-                        <!--<microcharts:ChartView Grid.Row="3" x:Name="chartView"/>-->
+                        <microcharts:ChartView Grid.Row="3" x:Name="chartView"/>
                         <Button Grid.Row="4"
                                     FontSize="14"
                                     TextColor="#FFFFFF"
@@ -75,10 +75,12 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <controls:ImageButton Grid.Column="0"
-                    Image="ic_sync_alert"/>
-                <Label Grid.Column="1">
+                    Image="ic_sync_alert"
+                    BackgroundColor="Transparent"
+                    Command="{Binding LoadDataCommand}"/>
+                <Label Grid.Column="1"
                     Text="Ops, parece que você teve um problema ao carregar os dados da internet. Toque aqui para atualizar."
-                   FontSize="15"
+                   FontSize="15">
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding LoadDataCommand}" NumberOfTapsRequired="1"/>
                     </Label.GestureRecognizers>

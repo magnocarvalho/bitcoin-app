@@ -13,11 +13,22 @@ using Entry = Microcharts.Entry;
 
 namespace BitcoinApp
 {
-	public partial class MainPage : ContentPage
-	{
+    public partial class MainPage : ContentPage
+    {
+        private const string UPDATE_CHART_VIEW = "UPDATE_CHART_VIEW";
         public MainPage()
-		{
-			InitializeComponent();
+        {
+            InitializeComponent();
+            MessagingCenter.Subscribe<MainVieWModel, Chart>(this, UPDATE_CHART_VIEW, (sender, chart) =>
+            {
+                chartView.Chart = chart;
+            });
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            MessagingCenter.Send<MainPage>(this, "call");
         }
     }
 }

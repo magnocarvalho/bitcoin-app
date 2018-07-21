@@ -2,6 +2,8 @@
 using BitcoinApp.Helpers;
 using BitcoinApp.Model;
 using BitcoinApp.Services.Interfaces;
+using Microcharts;
+using Microcharts.Forms;
 using Newtonsoft.Json;
 using SkiaSharp;
 using System;
@@ -17,6 +19,8 @@ namespace BitcoinApp.ViewModel
 {
     public class MainVieWModel : BaseViewModel
     {
+        private const string UPDATE_CHART_VIEW = "UPDATE_CHART_VIEW";
+
         private bool _isBusy;
         public bool IsBusy
         {
@@ -54,6 +58,7 @@ namespace BitcoinApp.ViewModel
         public Command LoadDataCommand { get; set; }
 
         public ObservableCollection<Microcharts.Entry> Entries { get; set; }
+        public Chart Chart { get; private set; }
 
         private readonly IActualPriceService _actualPriceService;
         private readonly IMarketPriceService _marketPriceService;
@@ -65,7 +70,11 @@ namespace BitcoinApp.ViewModel
             IsBusy = false;
             ErrorMessage = false;
             LoadDataCommand = new Command(LoadDataExecuteCommand);
-            LoadDataExecuteCommand();
+            //LoadDataExecuteCommand();
+            MessagingCenter.Subscribe<MainPage>(this, "call", (sender) =>
+            {
+                LoadDataExecuteCommand();
+            });
         }
 
         private void LoadDataExecuteCommand()
@@ -120,7 +129,7 @@ namespace BitcoinApp.ViewModel
             return _marketPriceService.Insert(Market);
         }
 
-        private void DrawChart(MarketPrice market)
+        private void FillChart(MarketPrice market)
         {
             var entries = new List<Microcharts.Entry>();
             foreach (var price in market.Values)
@@ -132,6 +141,19 @@ namespace BitcoinApp.ViewModel
                 });
             }
             Entries = new ObservableCollection<Microcharts.Entry>(entries);
+            DrawChart();
+        }
+
+        private void DrawChart()
+        {
+            Chart = new LineChart
+            {
+                Entries = Entries,
+                PointMode = PointMode.None,
+                LineMode = LineMode.Straight
+            };
+            Chart.LabelTextSize = 25;
+            MessagingCenter.Send<MainVieWModel, Chart>(this, UPDATE_CHART_VIEW, Chart);
         }
 
         private bool ObjectIsNull<T>(T item)
@@ -145,13 +167,13 @@ namespace BitcoinApp.ViewModel
         private void ValidateChartData()
         {
             if (!ObjectIsNull(Market))
-                DrawChart(Market);
+                FillChart(Market);
             else if (!ObjectIsNull(DbMarket))
-                DrawChart(DbMarket);
+                FillChart(DbMarket);
             else
             {
                 Entries = null;
-                ErrorMessage &= true;
+                ErrorMessage = true;
                 return;
             }
         }
@@ -166,7 +188,7 @@ namespace BitcoinApp.ViewModel
             {
                 ActualPrice = "--";
                 ActualDate = null;
-                ErrorMessage &= true;
+                ErrorMessage = true;
                 return;
             }
         }
