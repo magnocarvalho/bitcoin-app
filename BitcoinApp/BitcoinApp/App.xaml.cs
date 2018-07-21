@@ -17,11 +17,6 @@ namespace BitcoinApp
 		public App ()
 		{
 			InitializeComponent();
-            var unityContainer = new UnityContainer();
-            unityContainer.RegisterType<IActualPriceService, ActualPriceService>();
-            unityContainer.RegisterType<IMarketPriceService, MarketPriceService>();
-            unityContainer.RegisterInstance(typeof(MainVieWModel));
-            ServiceLocator.SetLocatorProvider(() => new UnityServiceLocator(unityContainer));
 
 			MainPage = new NavigationPage(new MainPage());
 		}

@@ -7,7 +7,9 @@
              xmlns:controls="clr-namespace:XLabs.Forms.Controls;assembly=XLabs.Forms"
              x:Class="BitcoinApp.MainPage"
              Title="BitcoinApp"
-             BackgroundColor="WhiteSmoke">
+             BackgroundColor="WhiteSmoke"
+             BindingContext="{Binding MainVieWModel, Source={StaticResource Locator}}">
+    
     <ContentPage.ToolbarItems>
         <ToolbarItem Order="Primary" Icon="ic_refresh" Command="{Binding LoadDataCommand}"/>
     </ContentPage.ToolbarItems>
@@ -51,7 +53,7 @@
                                     HorizontalOptions="Center"
                                     Text="{Binding ActualDate}"
                                        TextColor="#000"/>
-                        <microcharts:ChartView Grid.Row="3" x:Name="chartView"/>
+                        <!--<microcharts:ChartView Grid.Row="3" x:Name="chartView"/>-->
                         <Button Grid.Row="4"
                                     FontSize="14"
                                     TextColor="#FFFFFF"

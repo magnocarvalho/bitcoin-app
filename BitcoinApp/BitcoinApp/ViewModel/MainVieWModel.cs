@@ -59,6 +59,7 @@ namespace BitcoinApp.ViewModel
             IsBusy = false;
             ErrorMessage = false;
             LoadDataCommand = new Command(LoadDataExecuteCommand);
+            LoadDataExecuteCommand();
         }
 
         internal void LoadDataExecuteCommand()
@@ -67,7 +68,7 @@ namespace BitcoinApp.ViewModel
                 return;
 
             IsBusy = true;
-            ErrorMessage = true;
+            ErrorMessage = false;
             ActualPrice actualPrice = _actualPriceService.Get();
             MarketPrice marketPrice = _marketPriceService.Get();
             
@@ -98,6 +99,7 @@ namespace BitcoinApp.ViewModel
             }
             IsBusy = false;
         }
+
         private void FillActualPrice(ActualPrice actual)
         {
             ActualPrice = String.Format("U$ {0:0.##}", actual.UsdPrice);

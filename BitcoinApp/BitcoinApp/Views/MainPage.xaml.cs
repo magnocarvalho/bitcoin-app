@@ -15,20 +15,9 @@ namespace BitcoinApp
 {
 	public partial class MainPage : ContentPage
 	{
-        public MainVieWModel ViewModel { get; set; }
-
         public MainPage()
 		{
 			InitializeComponent();
-
-            ViewModel =  ServiceLocator.Current.GetInstance<MainVieWModel>();
-            BindingContext = ViewModel;
-        }
-
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-            ViewModel.LoadDataExecuteCommand();
         }
     }
 }

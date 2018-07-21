@@ -10,7 +10,7 @@ namespace BitcoinApp.Db
 {
     public class DbBase : IDisposable
     {
-        private readonly SQLiteConnection Connection;
+        protected SQLiteConnection Connection;
 
         public DbBase()
         {
@@ -18,12 +18,11 @@ namespace BitcoinApp.Db
             Connection = new SQLiteConnection(Path.Combine(config.DBPath, "database.db3"),
                 SQLiteOpenFlags.ReadWrite |
                 SQLiteOpenFlags.Create |
-                SQLiteOpenFlags.SharedCache,
-                false);
+                SQLiteOpenFlags.SharedCache);
 
+            Connection.CreateTable<Value>();
             Connection.CreateTable<MarketPrice>();
             Connection.CreateTable<ActualPrice>();
-            Connection.CreateTable<Value>();
         }
 
         public void Dispose()
