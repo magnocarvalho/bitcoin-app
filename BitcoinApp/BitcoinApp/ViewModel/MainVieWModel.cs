@@ -31,6 +31,9 @@ namespace BitcoinApp.ViewModel
             set { SetProperty(ref _errorMessage, value); }
         }
 
+        public ActualPrice BDActual { get; private set; }
+        public MarketPrice BDMarket { get; private set; }
+
         private string _actualPrice;
         public string ActualPrice
         {
@@ -72,47 +75,34 @@ namespace BitcoinApp.ViewModel
 
             IsBusy = true;
             ErrorMessage = false;
-            ActualPrice actualPrice = _actualPriceService.Get();
-            MarketPrice marketPrice = _marketPriceService.Get();
+            BDActual = _actualPriceService.Get();
+            BDMarket = _marketPriceService.Get();
 
-            if (!ObjectIsNull(actualPrice) && !ObjectIsNull(marketPrice))
-            {
-                if (!LoadActualPriceData())
-                {
-                    FillActualPrice(actualPrice);
-                }
-                if (!LoadChatData())
-                {
-                    DrawChart(marketPrice);
-                }
-            }
-            else
-            {
-                if (!LoadActualPriceData())
-                {
-                    ActualPrice = "--";
-                    ActualDate = null;
-                    ErrorMessage &= true;
-                }
-                else
-                    FillActualPrice(Actual);
+            LoadActualPriceData();
+            LoadChatData();
 
-                if (!LoadChatData())
-                {
-                    Entries = null;
-                    ErrorMessage &= true;
-                }
-                else
-                    DrawChart(Market);
-
-            }
             IsBusy = false;
         }
 
-        private void FillActualPrice(ActualPrice actual)
+        private void FillActualPrice()
         {
-            ActualPrice = String.Format("U$ {0:0.##}", actual.UsdPrice);
-            ActualDate = actual.FormatedDate.Date.ToString("dd/MM/yyyy");
+            if (!ObjectIsNull(Actual))
+            {
+                ActualPrice = String.Format("U$ {0:0.##}", Actual.UsdPrice);
+                ActualDate = Actual.FormatedDate.Date.ToString("dd/MM/yyyy");
+            }
+            else if (!ObjectIsNull(BDActual))
+            {
+                ActualPrice = String.Format("U$ {0:0.##}", BDActual.UsdPrice);
+                ActualDate = BDActual.FormatedDate.Date.ToString("dd/MM/yyyy");
+            }
+            else
+            {
+                ActualPrice = "--";
+                ActualDate = null;
+                ErrorMessage &= true;
+                return;
+            }
         }
 
         internal bool LoadActualPriceData()
@@ -121,7 +111,8 @@ namespace BitcoinApp.ViewModel
                 return false;
 
             Actual = ApiSync.GetActualPrice();
-            var _actual = _actualPriceService.Get();
+
+            FillActualPrice();
 
             if (ObjectIsNull(Actual))
                 return false;
@@ -135,7 +126,8 @@ namespace BitcoinApp.ViewModel
                 return false;
 
             Market = ApiSync.GetChartValues();
-            var _marketPrice = _marketPriceService.Get();
+
+            ValidateChartData();
 
             if (ObjectIsNull(Market))
                 return false;
@@ -143,10 +135,10 @@ namespace BitcoinApp.ViewModel
             return _marketPriceService.Insert(Market);
         }
 
-        private void DrawChart(MarketPrice marketPrice)
+        private void DrawChart(MarketPrice market)
         {
             var entries = new List<Microcharts.Entry>();
-            foreach (var price in marketPrice.Values)
+            foreach (var price in market.Values)
             {
                 entries.Add(new Microcharts.Entry((float)price.UsdPrice)
                 {
@@ -155,6 +147,7 @@ namespace BitcoinApp.ViewModel
                 });
             }
             Entries = new ObservableCollection<Microcharts.Entry>(entries);
+
         }
 
         internal bool ObjectIsNull<T>(T item)
@@ -163,6 +156,20 @@ namespace BitcoinApp.ViewModel
                 return true;
             else
                 return false;
+        }
+
+        internal void ValidateChartData()
+        {
+            if (!ObjectIsNull(Market))
+                DrawChart(Market);
+            else if (!ObjectIsNull(BDMarket))
+                DrawChart(BDMarket);
+            else
+            {
+                Entries = null;
+                ErrorMessage &= true;
+                return;
+            }
         }
     }
 }
