@@ -13,8 +13,22 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Order="Primary" Icon="ic_refresh" Command="{Binding LoadDataCommand}"/>
     </ContentPage.ToolbarItems>
+    <ContentPage.Content>
     <ScrollView>
-        <StackLayout>
+        <StackLayout >
+                <StackLayout>
+                    
+            <ActivityIndicator x:Name="activityIndicator"
+                           VerticalOptions="CenterAndExpand"
+                           HorizontalOptions="CenterAndExpand"
+                               IsEnabled="{Binding IsBusy, Mode=TwoWay}"
+                               IsRunning="{Binding IsBusy, Mode=TwoWay}"
+                               IsVisible="{Binding IsBusy, Mode=TwoWay}"
+                               HeightRequest="40"
+                               WidthRequest="40"
+                               Color="#003E06"/>
+                </StackLayout>
+
             <Frame IsClippedToBounds="True"
                 HasShadow="True"
                 BackgroundColor="White"
@@ -22,8 +36,6 @@
                 Margin="10, 10, 10, 0"
                 OutlineColor="Gray">
                 <StackLayout Orientation="Vertical">
-                    <ActivityIndicator IsRunning="{Binding IsBusy}"
-                                IsVisible="{Binding IsBusy}"/>
                     <Grid Padding="0,30,0,10"
                         BackgroundColor="Transparent">
                         <Grid.RowDefinitions>
@@ -60,7 +72,8 @@
                                     BackgroundColor="#003E06"
                                     VerticalOptions="Center"
                                     HorizontalOptions="Center"
-                                    x:Name="btnMoreInfo"/>
+                                    x:Name="btnMoreInfo"
+                                    Clicked="btnMoreInfo_Clicked"/>
 
                     </Grid>
                 </StackLayout>
@@ -71,6 +84,7 @@
                 Padding="20"
                 HorizontalOptions="Center">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
@@ -89,5 +103,5 @@
 
         </StackLayout>
     </ScrollView>
-
+    </ContentPage.Content>
 </ContentPage>

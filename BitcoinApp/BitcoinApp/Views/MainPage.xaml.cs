@@ -1,6 +1,7 @@
 ﻿using BitcoinApp.Helpers;
 using BitcoinApp.Resources;
 using BitcoinApp.ViewModel;
+using BitcoinApp.Views;
 using Microcharts;
 using Microsoft.Practices.ServiceLocation;
 using SkiaSharp;
@@ -34,6 +35,11 @@ namespace BitcoinApp
         {
             base.OnAppearing();
             MessagingCenter.Send<MainPage>(this, LOAD_DATA);
+        }
+
+        private void btnMoreInfo_Clicked(object sender, EventArgs e)
+        {
+            this.Navigation.PushAsync(new ListValuesPage());
         }
     }
 }

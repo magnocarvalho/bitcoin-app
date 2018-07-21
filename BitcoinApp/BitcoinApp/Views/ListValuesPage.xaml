@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:XLabs.Forms.Controls;assembly=XLabs.Forms"
+             x:Class="BitcoinApp.Views.ListValuesPage"
+             Title="List">
+    
+    <ListView x:Name="MyListView"
+            ItemsSource="{Binding Items}"
+            ItemTapped="Handle_ItemTapped"
+            CachingStrategy="RecycleElement"
+              HasUnevenRows="True" 
+              IsPullToRefreshEnabled="True"
+              >
+        <ListView.ItemTemplate>
+            <DataTemplate >
+                <ViewCell >
+                    <Frame 
+                IsClippedToBounds="True"
+                HasShadow="True"
+                BackgroundColor="White"
+                Padding="5"
+                Margin="10"
+                
+                        >
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="50"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="20"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Row="0" Grid.Column="0" 
+                                   Text="{Binding Date}" 
+                                   HorizontalOptions="StartAndExpand" 
+                                   VerticalOptions="CenterAndExpand" 
+                                   TextColor="#000"/>
+                            <Label Grid.Row="0" Grid.Column="1" 
+                                   Text="{Binding Value}" 
+                                   FontAttributes="Bold"
+                                   FontSize="15"
+                                   HorizontalOptions="EndAndExpand" 
+                                   VerticalOptions="CenterAndExpand" 
+                                   TextColor="#000"/>
+                            <controls:ImageButton  Grid.Row="0" Grid.Column="2" 
+                                                   Image="arrow_up_thick" 
+                                                   BackgroundColor="Transparent" 
+                                                   HorizontalOptions="End" 
+                                                   VerticalOptions="CenterAndExpand" 
+                                                   TextColor="#000"/>
+
+
+                        </Grid>
+                    </Frame>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+</ContentPage>

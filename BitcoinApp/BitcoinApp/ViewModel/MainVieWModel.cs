@@ -71,19 +71,20 @@ namespace BitcoinApp.ViewModel
             _marketPriceService = marketPriceService;
             IsBusy = false;
             ErrorMessage = false;
-            LoadDataCommand = new Command(LoadDataExecuteCommand);
-            MessagingCenter.Subscribe<MainPage>(this, LOAD_DATA, (sender) =>
+            LoadDataCommand = new Command(async () => await LoadDataExecuteCommand());
+            MessagingCenter.Subscribe<MainPage>(this, LOAD_DATA, async (sender) =>
             {
-                LoadDataExecuteCommand();
+                 await LoadDataExecuteCommand();
             });
         }
 
-        private void LoadDataExecuteCommand()
+        private async Task LoadDataExecuteCommand()
         {
             if (IsBusy)
                 return;
 
             IsBusy = true;
+            App.Current.MainPage.ForceLayout();
             ErrorMessage = false;
             DbActual = _actualPriceService.Get();
             DbMarket = _marketPriceService.Get();
@@ -94,6 +95,7 @@ namespace BitcoinApp.ViewModel
             ValidateChartData();
 
             IsBusy = false;
+            App.Current.MainPage.ForceLayout();
         }
 
         private void FillActualPrice(ActualPrice actual)
