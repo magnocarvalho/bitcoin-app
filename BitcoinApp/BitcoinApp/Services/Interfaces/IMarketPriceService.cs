@@ -5,10 +5,10 @@ using System.Text;
 
 namespace BitcoinApp.Services.Interfaces
 {
-    public interface IActualPriceService
+    public interface IMarketPriceService
     {
-        ActualPrice Get();
-        bool Insert(ActualPrice actualPrice);
-
+        MarketPrice Get();
+        List<Value> GetValues();
+        bool Insert(MarketPrice actualPrice);
     }
 }

@@ -1,7 +1,7 @@
 ﻿using BitcoinApp.Helpers;
 using BitcoinApp.ViewModel;
-using CommonServiceLocator;
 using Microcharts;
+using Microsoft.Practices.ServiceLocation;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
@@ -13,29 +13,22 @@ using Entry = Microcharts.Entry;
 
 namespace BitcoinApp
 {
-	public partial class MainPage : ContentPage
-	{
-        public MainVieWModel ViewModel { get; set; }
-        
+    public partial class MainPage : ContentPage
+    {
+        private const string UPDATE_CHART_VIEW = "UPDATE_CHART_VIEW";
         public MainPage()
-		{
-			InitializeComponent();
-            ViewModel = ServiceLocator.Current.GetInstance<MainVieWModel>();
-            BindingContext = ViewModel;
+        {
+            InitializeComponent();
+            MessagingCenter.Subscribe<MainVieWModel, Chart>(this, UPDATE_CHART_VIEW, (sender, chart) =>
+            {
+                chartView.Chart = chart;
+            });
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            ViewModel.LoadData();
-            //ViewModel.LoadActualPriceData();
-            chartView.Chart = new LineChart
-            {
-                Entries = ViewModel.Entries,
-                PointMode = PointMode.None,
-                LineMode = LineMode.Straight
-            };
-            chartView.Chart.LabelTextSize = 25;
+            MessagingCenter.Send<MainPage>(this, "call");
         }
     }
 }

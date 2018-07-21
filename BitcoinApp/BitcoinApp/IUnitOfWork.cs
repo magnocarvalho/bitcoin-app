@@ -8,6 +8,8 @@ namespace BitcoinApp
     public interface IUnitOfWork : IDisposable
     {
         IActualPriceRepository ActualPriceRepository { get; }
+        IMarketPriceRepository MarketPriceRepository { get; }
+        IValueRepository ValueRepository { get; }
 
         void Commit();
     }

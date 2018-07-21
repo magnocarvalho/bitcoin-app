@@ -19,9 +19,11 @@ namespace BitcoinApp.Db
                 SQLiteOpenFlags.ReadWrite |
                 SQLiteOpenFlags.Create |
                 SQLiteOpenFlags.SharedCache);
+
+            Connection.CreateTable<Value>();
             Connection.CreateTable<MarketPrice>();
             Connection.CreateTable<ActualPrice>();
-            Connection.CreateTable<Value>();
+            
         }
 
         public void Dispose()

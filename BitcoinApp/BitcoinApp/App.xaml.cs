@@ -1,9 +1,10 @@
 using BitcoinApp.Services;
 using BitcoinApp.Services.Interfaces;
-using CommonServiceLocator;
+using BitcoinApp.ViewModel;
+using Microsoft.Practices.ServiceLocation;
+using Microsoft.Practices.Unity;
 using System;
-using Unity;
-using Unity.ServiceLocation;
+using System.ComponentModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -16,9 +17,7 @@ namespace BitcoinApp
 		public App ()
 		{
 			InitializeComponent();
-            var unityContainer = new UnityContainer();
-            unityContainer.RegisterType<IActualPriceService, ActualPriceService>();
-            ServiceLocator.SetLocatorProvider(() => new UnityServiceLocator(unityContainer));
+
 			MainPage = new NavigationPage(new MainPage());
 		}
 

@@ -7,12 +7,11 @@ using System.Text;
 namespace BitcoinApp.Model
 {
     [Table("actual_price")]
-    public class ActualPrice : BaseEntity
+    public class ActualPrice 
     {
         [JsonProperty("timestamp")]
         public long TimeStamp { get; set; }
 
-        [Ignore]
         public DateTime FormatedDate { get; set; }
 
         [JsonProperty("market_price_usd")]

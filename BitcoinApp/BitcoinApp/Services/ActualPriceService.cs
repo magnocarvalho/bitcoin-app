@@ -14,5 +14,15 @@ namespace BitcoinApp.Services
         }
 
         public ActualPrice Get() => new UnitOfWork(DbContext).ActualPriceRepository.Get();
+
+        public bool Insert(ActualPrice actualPrice)
+        {
+            var uow = new UnitOfWork(DbContext);
+
+            var rs = uow.ActualPriceRepository.Insert(actualPrice);
+            return rs;
+
+        }
+
     }
 }
