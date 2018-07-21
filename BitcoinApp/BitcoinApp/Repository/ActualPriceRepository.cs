@@ -13,23 +13,13 @@ namespace BitcoinApp.Repository
         {
         }
 
-        public bool Exists(int id)
-        {
-            var rs = DbContext.GetConnection().Get<ActualPrice>(id);
-            return rs.Id > 0 ? true : false;
-        }
-
         public ActualPrice Get() => DbContext.GetConnection().Table<ActualPrice>().FirstOrDefault();
 
         public bool Insert(ActualPrice actualPrice)
         {
-            var rs = DbContext.GetConnection().Insert(actualPrice);
-            return rs > 0 ? true : false;
-        }
-
-        public bool Update(ActualPrice actualPrice)
-        {
-            var rs = DbContext.GetConnection().Update(actualPrice);
+            int rs = 0;
+            DbContext.GetConnection().Execute("delete from actual_price");
+            rs = DbContext.GetConnection().Insert(actualPrice);
             return rs > 0 ? true : false;
         }
     }

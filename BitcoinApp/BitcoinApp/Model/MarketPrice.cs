@@ -6,7 +6,7 @@ using System.Text;
 namespace BitcoinApp.Model
 {
     [Table("market_price")]
-    public class MarketPrice : BaseEntity
+    public class MarketPrice 
     {
         public string Status { get; set; }
         public string Name { get; set; }

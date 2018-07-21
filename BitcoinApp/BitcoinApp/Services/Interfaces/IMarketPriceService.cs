@@ -8,7 +8,7 @@ namespace BitcoinApp.Services.Interfaces
     public interface IMarketPriceService
     {
         MarketPrice Get();
+        List<Value> GetValues();
         bool Insert(MarketPrice actualPrice);
-        bool Update(MarketPrice actualPrice);
     }
 }

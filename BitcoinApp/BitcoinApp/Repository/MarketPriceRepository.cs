@@ -1,6 +1,7 @@
 ﻿using BitcoinApp.Db;
 using BitcoinApp.Model;
 using BitcoinApp.Repository.Interfaces;
+using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,23 +14,20 @@ namespace BitcoinApp.Repository
         {
         }
 
-        public MarketPrice Get() => DbContext.GetConnection().Table<MarketPrice>().FirstOrDefault();
+        public MarketPrice Get()
+        {
+            var market =  DbContext.GetConnection().Table<MarketPrice>().FirstOrDefault();
+            return market;
+        }
 
         public bool Insert(MarketPrice marketPrice)
         {
             int rs = 0;
+            DbContext.GetConnection().Execute("delete from market_price");
+            DbContext.GetConnection().Execute("delete from values");
             rs = DbContext.GetConnection().Insert(marketPrice);
-            rs +=  DbContext.GetConnection().Execute("delete from value");
-            foreach(var value in marketPrice.Values)
-            {
-                rs += DbContext.GetConnection().Insert(value);
-            }
-            return rs > 0 ? true : false;
-        }
-
-        public bool Update(MarketPrice marketPrice)
-        {
-            var rs = DbContext.GetConnection().Update(marketPrice);
+            rs = DbContext.GetConnection().InsertAll(marketPrice.Values);
+            
             return rs > 0 ? true : false;
         }
     }

@@ -13,26 +13,23 @@ namespace BitcoinApp.Services
         {
         }
 
-        public MarketPrice Get() => new UnitOfWork(DbContext).MarketPriceRepository.Get();
+        public MarketPrice Get()
+        {
+            var uow = new UnitOfWork(DbContext);
+            var market = uow.MarketPriceRepository.Get();
+            market.Values = GetValues();
+            return market;
+        }
+
+        public List<Value> GetValues() => new UnitOfWork(DbContext).ValueRepository.Get();
 
         public bool Insert(MarketPrice actualPrice)
         {
-            using (var uow = new UnitOfWork(DbContext))
-            {
-                var rs = uow.MarketPriceRepository.Insert(actualPrice);
-                uow.Commit();
-                return rs;
-            }
+            var uow = new UnitOfWork(DbContext);
+            var rs = uow.MarketPriceRepository.Insert(actualPrice);
+
+            return rs;
         }
 
-        public bool Update(MarketPrice actualPrice)
-        {
-            using (var uow = new UnitOfWork(DbContext))
-            {
-                var rs = uow.MarketPriceRepository.Update(actualPrice);
-                uow.Commit();
-                return rs;
-            }
-        }
     }
 }

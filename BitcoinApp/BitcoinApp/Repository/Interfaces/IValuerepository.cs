@@ -5,9 +5,9 @@ using System.Text;
 
 namespace BitcoinApp.Repository.Interfaces
 {
-    public interface IMarketPriceRepository
+    public interface IValueRepository
     {
-        MarketPrice Get();
-        bool Insert(MarketPrice actualPrice);
+        List<Value> Get();
+        bool Insert(Value actualPrice);
     }
 }

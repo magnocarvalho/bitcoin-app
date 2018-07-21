@@ -9,7 +9,6 @@ namespace BitcoinApp.Services.Interfaces
     {
         ActualPrice Get();
         bool Insert(ActualPrice actualPrice);
-        bool Update(ActualPrice actualPrice);
-        bool Exists(int id);
+
     }
 }

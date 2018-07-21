@@ -23,6 +23,7 @@ namespace BitcoinApp.Db
             Connection.CreateTable<Value>();
             Connection.CreateTable<MarketPrice>();
             Connection.CreateTable<ActualPrice>();
+            
         }
 
         public void Dispose()

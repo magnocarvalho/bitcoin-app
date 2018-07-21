@@ -9,6 +9,7 @@ namespace BitcoinApp
     {
         IActualPriceRepository ActualPriceRepository { get; }
         IMarketPriceRepository MarketPriceRepository { get; }
+        IValueRepository ValueRepository { get; }
 
         void Commit();
     }

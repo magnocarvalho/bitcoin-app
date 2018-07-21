@@ -28,7 +28,7 @@ namespace BitcoinApp.ViewModel
         public bool ErrorMessage
         {
             get { return _errorMessage; }
-            set { SetProperty(ref _errorMessage, value);}
+            set { SetProperty(ref _errorMessage, value); }
         }
 
         private string _actualPrice;
@@ -44,6 +44,9 @@ namespace BitcoinApp.ViewModel
             get { return _actualDate; }
             set { SetProperty(ref _actualDate, value); }
         }
+
+        public ActualPrice Actual { get; set; }
+        public MarketPrice Market { get; set; }
 
         public Command LoadDataCommand { get; set; }
 
@@ -71,7 +74,7 @@ namespace BitcoinApp.ViewModel
             ErrorMessage = false;
             ActualPrice actualPrice = _actualPriceService.Get();
             MarketPrice marketPrice = _marketPriceService.Get();
-            
+
             if (!ObjectIsNull(actualPrice) && !ObjectIsNull(marketPrice))
             {
                 if (!LoadActualPriceData())
@@ -80,7 +83,7 @@ namespace BitcoinApp.ViewModel
                 }
                 if (!LoadChatData())
                 {
-                    DrawChart(marketPrice); 
+                    DrawChart(marketPrice);
                 }
             }
             else
@@ -91,11 +94,17 @@ namespace BitcoinApp.ViewModel
                     ActualDate = null;
                     ErrorMessage &= true;
                 }
+                else
+                    FillActualPrice(Actual);
+
                 if (!LoadChatData())
                 {
                     Entries = null;
                     ErrorMessage &= true;
                 }
+                else
+                    DrawChart(Market);
+
             }
             IsBusy = false;
         }
@@ -111,17 +120,13 @@ namespace BitcoinApp.ViewModel
             if (!ApiSync.HasConnection())
                 return false;
 
-            var actual = ApiSync.GetActualPrice();
+            Actual = ApiSync.GetActualPrice();
             var _actual = _actualPriceService.Get();
-            if (!ObjectIsNull(actual))
+
+            if (ObjectIsNull(Actual))
                 return false;
 
-            FillActualPrice(actual);
-
-            if (!ObjectIsNull(_actual))
-                return _actualPriceService.Update(actual);
-            else
-                return _actualPriceService.Insert(actual);
+            return _actualPriceService.Insert(Actual);
         }
 
         internal bool LoadChatData()
@@ -129,18 +134,13 @@ namespace BitcoinApp.ViewModel
             if (!ApiSync.HasConnection())
                 return false;
 
-            var marketPrice = ApiSync.GetChartValues();
+            Market = ApiSync.GetChartValues();
             var _marketPrice = _marketPriceService.Get();
 
-            if (ObjectIsNull(marketPrice))
+            if (ObjectIsNull(Market))
                 return false;
 
-            DrawChart(marketPrice);
-
-            if (ObjectIsNull(_marketPrice))
-                return _marketPriceService.Update(marketPrice);
-            else
-                return _marketPriceService.Insert(marketPrice);
+            return _marketPriceService.Insert(Market);
         }
 
         private void DrawChart(MarketPrice marketPrice)
@@ -159,7 +159,7 @@ namespace BitcoinApp.ViewModel
 
         internal bool ObjectIsNull<T>(T item)
         {
-            if (item != null)
+            if (item == null)
                 return true;
             else
                 return false;
