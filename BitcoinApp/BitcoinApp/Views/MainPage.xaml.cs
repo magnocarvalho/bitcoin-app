@@ -1,4 +1,5 @@
 ﻿using BitcoinApp.Helpers;
+using BitcoinApp.Resources;
 using BitcoinApp.ViewModel;
 using Microcharts;
 using Microsoft.Practices.ServiceLocation;
@@ -16,9 +17,13 @@ namespace BitcoinApp
     public partial class MainPage : ContentPage
     {
         private const string UPDATE_CHART_VIEW = "UPDATE_CHART_VIEW";
+        private const string LOAD_DATA = "LOAD_DATA";
         public MainPage()
         {
             InitializeComponent();
+            lblInternetProblem.Text = AppResources.InternetProblem;
+            btnMoreInfo.Text = AppResources.MoreInformation;
+
             MessagingCenter.Subscribe<MainVieWModel, Chart>(this, UPDATE_CHART_VIEW, (sender, chart) =>
             {
                 chartView.Chart = chart;
@@ -28,7 +33,7 @@ namespace BitcoinApp
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            MessagingCenter.Send<MainPage>(this, "call");
+            MessagingCenter.Send<MainPage>(this, LOAD_DATA);
         }
     }
 }

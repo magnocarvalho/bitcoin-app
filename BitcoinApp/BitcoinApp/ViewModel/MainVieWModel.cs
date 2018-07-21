@@ -1,6 +1,7 @@
 ﻿using BitcoinApp.Db;
 using BitcoinApp.Helpers;
 using BitcoinApp.Model;
+using BitcoinApp.Resources;
 using BitcoinApp.Services.Interfaces;
 using Microcharts;
 using Microcharts.Forms;
@@ -20,6 +21,7 @@ namespace BitcoinApp.ViewModel
     public class MainVieWModel : BaseViewModel
     {
         private const string UPDATE_CHART_VIEW = "UPDATE_CHART_VIEW";
+        private const string LOAD_DATA = "LOAD_DATA";
 
         private bool _isBusy;
         public bool IsBusy
@@ -70,8 +72,7 @@ namespace BitcoinApp.ViewModel
             IsBusy = false;
             ErrorMessage = false;
             LoadDataCommand = new Command(LoadDataExecuteCommand);
-            //LoadDataExecuteCommand();
-            MessagingCenter.Subscribe<MainPage>(this, "call", (sender) =>
+            MessagingCenter.Subscribe<MainPage>(this, LOAD_DATA, (sender) =>
             {
                 LoadDataExecuteCommand();
             });
@@ -98,7 +99,7 @@ namespace BitcoinApp.ViewModel
         private void FillActualPrice(ActualPrice actual)
         {
             ActualPrice = String.Format("U$ {0:0.##}", actual.UsdPrice);
-            ActualDate = actual.FormatedDate.Date.ToString("dd/MM/yyyy");
+            ActualDate = actual.FormatedDate.Date.ToString(AppResources.FormatedDate);
         }
 
         private bool LoadActualPriceData()

@@ -60,7 +60,7 @@
                                     BackgroundColor="#003E06"
                                     VerticalOptions="Center"
                                     HorizontalOptions="Center"
-                                    Text="Mais Informações"/>
+                                    x:Name="btnMoreInfo"/>
 
                     </Grid>
                 </StackLayout>
@@ -79,7 +79,7 @@
                     BackgroundColor="Transparent"
                     Command="{Binding LoadDataCommand}"/>
                 <Label Grid.Column="1"
-                    Text="Ops, parece que você teve um problema ao carregar os dados da internet. Toque aqui para atualizar."
+                       x:Name="lblInternetProblem"
                    FontSize="15">
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding LoadDataCommand}" NumberOfTapsRequired="1"/>
