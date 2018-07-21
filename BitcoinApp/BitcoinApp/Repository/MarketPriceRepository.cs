@@ -24,7 +24,7 @@ namespace BitcoinApp.Repository
         {
             int rs = 0;
             DbContext.GetConnection().Execute("delete from market_price");
-            DbContext.GetConnection().Execute("delete from values");
+            DbContext.GetConnection().Execute("delete from market_values");
             rs = DbContext.GetConnection().Insert(marketPrice);
             rs = DbContext.GetConnection().InsertAll(marketPrice.Values);
             

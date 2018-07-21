@@ -17,7 +17,8 @@ namespace BitcoinApp.Services
         {
             var uow = new UnitOfWork(DbContext);
             var market = uow.MarketPriceRepository.Get();
-            market.Values = GetValues();
+            if (market != null)
+                market.Values = GetValues();
             return market;
         }
 
