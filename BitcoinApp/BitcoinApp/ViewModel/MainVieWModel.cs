@@ -72,7 +72,7 @@ namespace BitcoinApp.ViewModel
             ActualPrice actualPrice = _actualPriceService.Get();
             MarketPrice marketPrice = _marketPriceService.Get();
             
-            if (IsValid(actualPrice) && IsValid(marketPrice))
+            if (!ObjectIsNull(actualPrice) && !ObjectIsNull(marketPrice))
             {
                 if (!LoadActualPriceData())
                 {
@@ -113,8 +113,12 @@ namespace BitcoinApp.ViewModel
 
             var actual = ApiSync.GetActualPrice();
             var _actual = _actualPriceService.Get();
+            if (!ObjectIsNull(actual))
+                return false;
+
             FillActualPrice(actual);
-            if (IsValid(_actual))
+
+            if (!ObjectIsNull(_actual))
                 return _actualPriceService.Update(actual);
             else
                 return _actualPriceService.Insert(actual);
@@ -127,10 +131,13 @@ namespace BitcoinApp.ViewModel
 
             var marketPrice = ApiSync.GetChartValues();
             var _marketPrice = _marketPriceService.Get();
-            if (!IsValid(marketPrice))
+
+            if (ObjectIsNull(marketPrice))
                 return false;
 
-            if (IsValid(_marketPrice))
+            DrawChart(marketPrice);
+
+            if (ObjectIsNull(_marketPrice))
                 return _marketPriceService.Update(marketPrice);
             else
                 return _marketPriceService.Insert(marketPrice);
@@ -150,7 +157,7 @@ namespace BitcoinApp.ViewModel
             Entries = new ObservableCollection<Microcharts.Entry>(entries);
         }
 
-        internal bool IsValid<T>(T item)
+        internal bool ObjectIsNull<T>(T item)
         {
             if (item != null)
                 return true;

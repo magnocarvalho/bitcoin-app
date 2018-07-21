@@ -15,15 +15,21 @@ namespace BitcoinApp.Repository
 
         public MarketPrice Get() => DbContext.GetConnection().Table<MarketPrice>().FirstOrDefault();
 
-        public bool Insert(MarketPrice actualPrice)
+        public bool Insert(MarketPrice marketPrice)
         {
-            var rs = DbContext.GetConnection().Insert(actualPrice);
+            int rs = 0;
+            rs = DbContext.GetConnection().Insert(marketPrice);
+            rs +=  DbContext.GetConnection().Execute("delete from value");
+            foreach(var value in marketPrice.Values)
+            {
+                rs += DbContext.GetConnection().Insert(value);
+            }
             return rs > 0 ? true : false;
         }
 
-        public bool Update(MarketPrice actualPrice)
+        public bool Update(MarketPrice marketPrice)
         {
-            var rs = DbContext.GetConnection().Update(actualPrice);
+            var rs = DbContext.GetConnection().Update(marketPrice);
             return rs > 0 ? true : false;
         }
     }

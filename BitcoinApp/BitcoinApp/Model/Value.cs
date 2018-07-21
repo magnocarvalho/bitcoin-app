@@ -6,7 +6,7 @@ using System.Text;
 
 namespace BitcoinApp.Model
 {
-    [Table("Value")]
+    [Table("value")]
     public class Value : BaseEntity
     {
         [JsonProperty("x")]

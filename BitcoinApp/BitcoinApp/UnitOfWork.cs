@@ -32,6 +32,7 @@ namespace BitcoinApp
         private void ResetRepositories()
         {
             _actualPriceRepository = null;
+            _marketPriceRepository = null;
         }
 
         public void Dispose()
