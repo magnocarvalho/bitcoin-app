@@ -31,8 +31,8 @@ namespace BitcoinApp.ViewModel
             set { SetProperty(ref _errorMessage, value); }
         }
 
-        public ActualPrice BDActual { get; private set; }
-        public MarketPrice BDMarket { get; private set; }
+        public ActualPrice DbActual { get; private set; }
+        public MarketPrice DbMarket { get; private set; }
 
         private string _actualPrice;
         public string ActualPrice
@@ -68,51 +68,37 @@ namespace BitcoinApp.ViewModel
             LoadDataExecuteCommand();
         }
 
-        internal void LoadDataExecuteCommand()
+        private void LoadDataExecuteCommand()
         {
             if (IsBusy)
                 return;
 
             IsBusy = true;
             ErrorMessage = false;
-            BDActual = _actualPriceService.Get();
-            BDMarket = _marketPriceService.Get();
+            DbActual = _actualPriceService.Get();
+            DbMarket = _marketPriceService.Get();
 
             LoadActualPriceData();
+            ValidateActualPriceData();
             LoadChatData();
+            ValidateChartData();
 
             IsBusy = false;
         }
 
-        private void FillActualPrice()
+        private void FillActualPrice(ActualPrice actual)
         {
-            if (!ObjectIsNull(Actual))
-            {
-                ActualPrice = String.Format("U$ {0:0.##}", Actual.UsdPrice);
-                ActualDate = Actual.FormatedDate.Date.ToString("dd/MM/yyyy");
-            }
-            else if (!ObjectIsNull(BDActual))
-            {
-                ActualPrice = String.Format("U$ {0:0.##}", BDActual.UsdPrice);
-                ActualDate = BDActual.FormatedDate.Date.ToString("dd/MM/yyyy");
-            }
-            else
-            {
-                ActualPrice = "--";
-                ActualDate = null;
-                ErrorMessage &= true;
-                return;
-            }
+            ActualPrice = String.Format("U$ {0:0.##}", actual.UsdPrice);
+            ActualDate = actual.FormatedDate.Date.ToString("dd/MM/yyyy");
         }
 
-        internal bool LoadActualPriceData()
+        private bool LoadActualPriceData()
         {
             if (!ApiSync.HasConnection())
                 return false;
 
             Actual = ApiSync.GetActualPrice();
 
-            FillActualPrice();
 
             if (ObjectIsNull(Actual))
                 return false;
@@ -120,14 +106,13 @@ namespace BitcoinApp.ViewModel
             return _actualPriceService.Insert(Actual);
         }
 
-        internal bool LoadChatData()
+        private bool LoadChatData()
         {
             if (!ApiSync.HasConnection())
                 return false;
 
             Market = ApiSync.GetChartValues();
 
-            ValidateChartData();
 
             if (ObjectIsNull(Market))
                 return false;
@@ -147,10 +132,9 @@ namespace BitcoinApp.ViewModel
                 });
             }
             Entries = new ObservableCollection<Microcharts.Entry>(entries);
-
         }
 
-        internal bool ObjectIsNull<T>(T item)
+        private bool ObjectIsNull<T>(T item)
         {
             if (item == null)
                 return true;
@@ -158,15 +142,30 @@ namespace BitcoinApp.ViewModel
                 return false;
         }
 
-        internal void ValidateChartData()
+        private void ValidateChartData()
         {
             if (!ObjectIsNull(Market))
                 DrawChart(Market);
-            else if (!ObjectIsNull(BDMarket))
-                DrawChart(BDMarket);
+            else if (!ObjectIsNull(DbMarket))
+                DrawChart(DbMarket);
             else
             {
                 Entries = null;
+                ErrorMessage &= true;
+                return;
+            }
+        }
+
+        private void ValidateActualPriceData()
+        {
+            if (!ObjectIsNull(Actual))
+                FillActualPrice(Actual);
+            else if (!ObjectIsNull(DbActual))
+                FillActualPrice(DbActual);
+            else
+            {
+                ActualPrice = "--";
+                ActualDate = null;
                 ErrorMessage &= true;
                 return;
             }
