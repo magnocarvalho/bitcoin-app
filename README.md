@@ -19,9 +19,9 @@ Bibliotecas utilizadas:
 
 
 ## Screenshots
-![Tela inicial do app com a cotação atual do Bitcoin e um gráfico com a sua evolução](https://gitlab.com/lucasfcoelho1/bitcoin-app/blob/master/BitcoinApp/Screenshots/home.png "Tela incial do App")
+![Tela inicial do app com a cotação atual do Bitcoin e um gráfico com a sua evolução](BitcoinApp/Screenshots/home.png "Tela incial do App")
 
-![Tela de listagem das cotações com a diferença de um dia pro outro](https://gitlab.com/lucasfcoelho1/bitcoin-app/blob/master/BitcoinApp/Screenshots/list.png "Tela de listagem do App")
+![Tela de listagem das cotações com a diferença de um dia pro outro](BitcoinApp/Screenshots/list.png "Tela de listagem do App")
 
 
 ### Problemas conhecidos
