@@ -5,13 +5,17 @@
              x:Class="BitcoinApp.Views.ListValuesPage"
              BindingContext="{Binding ListViewModel, Source={StaticResource Locator}}"
              >
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Order="Primary" Command="{Binding LoadDataCommand, Mode=OneWay}" Icon="ic_refresh"/>
+    </ContentPage.ToolbarItems>
     
     <ListView x:Name="MyListView"
             ItemsSource="{Binding ListValues}"
             ItemTapped="Handle_ItemTapped"
             CachingStrategy="RecycleElement"
             HasUnevenRows="True" 
-            IsPullToRefreshEnabled="True">
+            IsPullToRefreshEnabled="False">
         
         <ListView.ItemTemplate>
             <DataTemplate >

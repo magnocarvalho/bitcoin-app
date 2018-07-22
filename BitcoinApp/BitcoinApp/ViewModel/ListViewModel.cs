@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
+using Xamarin.Forms;
 
 namespace BitcoinApp.ViewModel
 {
@@ -14,11 +15,13 @@ namespace BitcoinApp.ViewModel
         IMarketPriceService _marketPriceService;
         IActualPriceService _actualPriceService;
         public ObservableCollection<ItemList> ListValues { get; set; }
+        public Command LoadDataCommand { get; set; }
         public ListViewModel(IMarketPriceService marketPriceService, IActualPriceService actualPriceService)
         {
             _marketPriceService = marketPriceService;
             _actualPriceService = actualPriceService;
-            LoadData();
+            LoadDataCommand = new Command(LoadDataExecuteCommand);
+            LoadDataExecuteCommand();
         }
 
         public bool IsBusy { get; private set; }
@@ -28,7 +31,7 @@ namespace BitcoinApp.ViewModel
         public ActualPrice Actual { get; private set; }
         public MarketPrice Market { get; private set; }
 
-        void LoadData()
+        void LoadDataExecuteCommand()
         {
             if (IsBusy)
                 return;
@@ -36,10 +39,7 @@ namespace BitcoinApp.ViewModel
             IsBusy = true;
             ErrorMessage = false;
             DbMarket = _marketPriceService.Get();
-            DbActual = _actualPriceService.Get();
 
-            LoadActualPriceData();
-            ValidateActualPriceData();
             LoadValueData();
             ValidateValueData();
 
@@ -55,27 +55,6 @@ namespace BitcoinApp.ViewModel
             return true;
         }
 
-        private bool LoadActualPriceData()
-        {
-            if (!ApiSync.HasConnection())
-                return false;
-
-            Actual = ApiSync.GetActualPrice();
-            return true;
-        }
-
-        private void ValidateActualPriceData()
-        {
-            if (!ObjectIsNull(Actual))
-                FillActualPrice(Actual);
-            else if (!ObjectIsNull(DbActual))
-                FillActualPrice(DbActual);
-            else
-            {
-                ErrorMessage = true;
-                return;
-            }
-        }
         private void ValidateValueData()
         {
             if (!ObjectIsNull(Market))
@@ -91,7 +70,6 @@ namespace BitcoinApp.ViewModel
 
         private void FillList(MarketPrice market)
         {
-            //market.Values.Reverse();
             var listValues = new List<ItemList>();
             for (int i = 0; i < market.Values.Count; i++)
             {
@@ -116,11 +94,6 @@ namespace BitcoinApp.ViewModel
             }
             listValues.Reverse();
             ListValues = new ObservableCollection<ItemList>(listValues);
-        }
-
-        private void FillActualPrice(ActualPrice actual)
-        {
-            //throw new NotImplementedException();
         }
 
         private bool ObjectIsNull<T>(T item)
