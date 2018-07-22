@@ -111,7 +111,9 @@
     <AndroidResource Include="Resources\mipmap-xxxhdpi\Icon.png" />
     <AndroidResource Include="Resources\mipmap-xxxhdpi\launcher_foreground.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\blockchain_icon.png" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BitcoinApp\BitcoinApp.csproj">
       <Project>{146B0204-EED0-46D3-A790-A510C14773C0}</Project>
@@ -143,10 +145,13 @@
     <AndroidResource Include="Resources\drawable-xxxhdpi\ic_sync_alert.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\arrow_up_thick.xml" />
+    <AndroidResource Include="Resources\drawable\ic_arrow_up_thick.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\arrow_down_thick.xml" />
+    <AndroidResource Include="Resources\drawable\ic_arrow_down_thick.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\ic_square.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>
