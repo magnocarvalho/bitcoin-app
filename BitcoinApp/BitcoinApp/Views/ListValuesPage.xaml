@@ -3,15 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:XLabs.Forms.Controls;assembly=XLabs.Forms"
              x:Class="BitcoinApp.Views.ListValuesPage"
-             Title="List">
+             BindingContext="{Binding ListViewModel, Source={StaticResource Locator}}"
+             >
     
     <ListView x:Name="MyListView"
-            ItemsSource="{Binding Items}"
+            ItemsSource="{Binding ListValues}"
             ItemTapped="Handle_ItemTapped"
             CachingStrategy="RecycleElement"
-              HasUnevenRows="True" 
-              IsPullToRefreshEnabled="True"
-              >
+            HasUnevenRows="True" 
+            IsPullToRefreshEnabled="True">
+        
         <ListView.ItemTemplate>
             <DataTemplate >
                 <ViewCell >
@@ -20,9 +21,8 @@
                 HasShadow="True"
                 BackgroundColor="White"
                 Padding="5"
-                Margin="10"
-                
-                        >
+                Margin="10">
+                        
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="50"/>
@@ -33,19 +33,19 @@
                                 <ColumnDefinition Width="20"/>
                             </Grid.ColumnDefinitions>
                             <Label Grid.Row="0" Grid.Column="0" 
-                                   Text="{Binding Date}" 
+                                   Text="{Binding FormatedDate}" 
                                    HorizontalOptions="StartAndExpand" 
                                    VerticalOptions="CenterAndExpand" 
                                    TextColor="#000"/>
                             <Label Grid.Row="0" Grid.Column="1" 
-                                   Text="{Binding Value}" 
+                                   Text="{Binding UsdPrice}" 
                                    FontAttributes="Bold"
                                    FontSize="15"
                                    HorizontalOptions="EndAndExpand" 
                                    VerticalOptions="CenterAndExpand" 
                                    TextColor="#000"/>
                             <controls:ImageButton  Grid.Row="0" Grid.Column="2" 
-                                                   Image="arrow_up_thick" 
+                                                   Image="{Binding UpDown}" 
                                                    BackgroundColor="Transparent" 
                                                    HorizontalOptions="End" 
                                                    VerticalOptions="CenterAndExpand" 

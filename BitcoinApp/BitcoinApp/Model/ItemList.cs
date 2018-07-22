@@ -6,8 +6,8 @@ namespace BitcoinApp.Model
 {
     public class ItemList
     {
-        public string Date { get; set; }
-        public string Value { get; set; }
+        public string FormatedDate { get; set; }
+        public string UsdPrice { get; set; }
         public string UpDown { get; set; }
     }
 }

@@ -84,18 +84,16 @@ namespace BitcoinApp.ViewModel
                 return;
 
             IsBusy = true;
-            App.Current.MainPage.ForceLayout();
             ErrorMessage = false;
             DbActual = _actualPriceService.Get();
             DbMarket = _marketPriceService.Get();
 
             LoadActualPriceData();
             ValidateActualPriceData();
-            LoadChatData();
-            ValidateChartData();
+            LoadValueData();
+            ValidateValueData();
 
             IsBusy = false;
-            App.Current.MainPage.ForceLayout();
         }
 
         private void FillActualPrice(ActualPrice actual)
@@ -118,12 +116,12 @@ namespace BitcoinApp.ViewModel
             return _actualPriceService.Insert(Actual);
         }
 
-        private bool LoadChatData()
+        private bool LoadValueData()
         {
             if (!ApiSync.HasConnection())
                 return false;
 
-            Market = ApiSync.GetChartValues();
+            Market = ApiSync.GetMarketValues();
 
 
             if (ObjectIsNull(Market))
@@ -167,7 +165,7 @@ namespace BitcoinApp.ViewModel
                 return false;
         }
 
-        private void ValidateChartData()
+        private void ValidateValueData()
         {
             if (!ObjectIsNull(Market))
                 FillChart(Market);

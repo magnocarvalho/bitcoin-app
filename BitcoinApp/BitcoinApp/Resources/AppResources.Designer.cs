@@ -61,6 +61,15 @@ namespace BitcoinApp.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Daily History.
+        /// </summary>
+        internal static string DailyHistory {
+            get {
+                return ResourceManager.GetString("DailyHistory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to MM/dd/yyyy.
         /// </summary>
         internal static string FormatedDate {

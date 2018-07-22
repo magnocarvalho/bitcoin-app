@@ -12,7 +12,7 @@ namespace BitcoinApp.Helpers
 {
     public class ApiSync
     {
-        public static MarketPrice GetChartValues()
+        public static MarketPrice GetMarketValues()
         {
             try
             {

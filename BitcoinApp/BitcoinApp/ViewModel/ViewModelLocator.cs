@@ -20,12 +20,21 @@ namespace BitcoinApp.ViewModel
             }
         }
 
+        public ListViewModel ListViewModel
+        {
+            get
+            {
+                return _unityContainer.Resolve<ListViewModel>();
+            }
+        }
+
         public ViewModelLocator()
         {
             _unityContainer = new UnityContainer();
             _unityContainer.RegisterType<IActualPriceService, ActualPriceService>();
             _unityContainer.RegisterType<IMarketPriceService, MarketPriceService>();
             _unityContainer.RegisterType<MainVieWModel>(new ContainerControlledLifetimeManager());
+            _unityContainer.RegisterType<ListViewModel>(new ContainerControlledLifetimeManager());
 
             UnityServiceLocator unityServiceLocator = new UnityServiceLocator(_unityContainer);
             ServiceLocator.SetLocatorProvider(() => unityServiceLocator);
