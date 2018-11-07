@@ -32,6 +32,32 @@ Bibliotecas utilizadas:
    1. Alguns métodos e propriedades ficaram 'sobrando' no projeto. Não tive tempo de dar um refinamento.
    1. ~~O ícone do App é o default do Xamarin~~
    1. Não tem nenhum teste unitário =(
+   
+Updated Test Plans and Procedures   
+  
+Adicionar gerência de uma instituição financeira: Caixa preta e integração
+
+Criação da área de login: Teste de interface e integração
+Este teste poderá ser feito de forma exploratória, já que será apenas uma interface a ser testada. 
+
+Adicionar quadro de acompanhamento de tarefas: Teste unitário e de interface
+
+Validação de e-mail: Caixa preta
+Teste executado sem acesso ao código, passando diferentes formatos de email para a validação.
+
+Correção de relação entre personagem e usuário: Caixa preta
+Teste relacionado com o banco de dados, onde foi validado a relação dos personagens com o usuário que os criou. 
+
+Criação de área de cadastro de usuários: Teste unitário e de interface
+
+Melhoria geral na interface: Teste de interface
+Teste realizado de forma exploratória. 
+
+Adicionar o sistema de carteira online: Caixa preta e integração
+
+Mensagem de sucesso: Caixa preta e interface
+Teste feito se a mensagem foi executada de forma correta.
+
 
 
 
